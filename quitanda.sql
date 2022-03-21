@@ -1,39 +1,107 @@
--- banco de dados de uma quitanda
+-- Apagar Banco de Dados db_quitanda
+DROP DATABASE db_quitanda;
+
+-- Recriar o Banco de dados db_quitanda
 CREATE DATABASE db_quitanda;
 
--- selecionar banco de dados
+-- Selecionar o Banco de Dados db_quitanda
 USE db_quitanda;
 
--- criar tabela tb_produtos
-CREATE TABLE tb_produtos (
-id bigint auto_increment,
-nome varchar(255) NOT NULL,
-quantidade int, 
-data_validade date,
-preco decimal NOT NULL,
+-- Criar a tabela tb_categorias
+CREATE TABLE tb_categorias(
+id bigint AUTO_INCREMENT,
+descricao varchar(255) NOT NULL,
 PRIMARY KEY (id)
 );
 
--- inserir dados na tabela 
-INSERT INTO tb_produtos (nome, quantidade, data_validade, preco)
-VALUES ("arroz", 50, "2023-04-29", 20.00);
+-- Insere dados na tabela tb_categorias
+INSERT INTO tb_categorias (descricao)
+VALUES ("Frutas");
 
-INSERT INTO tb_produtos (nome, quantidade, data_validade, preco)
-VALUES ("chuchu", 20, "2022-04-18", 3.00);
+INSERT INTO tb_categorias (descricao)
+VALUES ("Verduras");
 
-INSERT INTO tb_produtos (nome, quantidade, data_validade, preco)
-VALUES ("tomate", 80, "2022-03-19", 16.00);
+INSERT INTO tb_categorias (descricao)
+VALUES ("Legumes");
 
-INSERT INTO tb_produtos (nome, quantidade, data_validade, preco)
-VALUES ("cenoura", 30, "2022-04-29", 13.00);
+INSERT INTO tb_categorias (descricao)
+VALUES ("Temperos");
 
-INSERT INTO tb_produtos (nome, quantidade, data_validade, preco)
-VALUES ("morango", 1, "2022-03-20", 8.50);
 
-INSERT INTO tb_produtos (nome, quantidade, data_validade, preco)
-VALUES ("banana", 100, "2022-04-10", 5.70);
+INSERT INTO tb_categorias (descricao)
+VALUES ("Ovos");
 
--- listar todos os produtos
+INSERT INTO tb_categorias (descricao)
+VALUES ("outros");
+
+-- Lista todos os dados da tabela tb_categorias
+SELECT * FROM tb_categorias;
+
+-- Criar a Tabela tb_produtos
+CREATE TABLE tb_produtos(
+id bigint AUTO_INCREMENT,
+nome varchar(255) NOT NULL,
+quantidade int, 
+dtvalidade date NULL,
+preco decimal(6, 2),
+categoria_id bigint, 
+PRIMARY KEY (id),
+FOREIGN KEY (categoria_id) REFERENCES tb_categorias(id)
+);
+
+-- Insere dados na tabela tb_produtos
+INSERT INTO tb_produtos (nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES ("Maçã", 1000, "2022-03-07", 1.99, 1);
+
+INSERT INTO tb_produtos (nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES ("Banana", 1300, "2022-03-08", 5.00, 1);
+
+INSERT INTO tb_produtos (nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES ("Batata doce", 2000, "2022-03-09", 10.00, 3);
+
+INSERT INTO tb_produtos (nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES ("Alface", 300, "2022-03-10", 7.00, 2);
+
+INSERT INTO tb_produtos (nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES ("Cebola", 1020, "2022-03-08", 5.00, 3);
+
+INSERT INTO tb_produtos(nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES("Ovo Branco", 1000, "2022-03-07", 15.00, 5);
+
+INSERT INTO tb_produtos(nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES("Agrião", 1500, "2022-03-06", 3.00, 2);
+
+INSERT INTO tb_produtos(nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES("Cenoura", 1800, "2022-03-09", 3.50, 3);
+
+INSERT INTO tb_produtos (nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES ("Pimenta", 1100, "2022-03-15", 10.00, 4);
+
+INSERT INTO tb_produtos (nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES ("Alecrim", 130, "2022-03-10", 5.00, 4);
+
+INSERT INTO tb_produtos (nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES ("Manga", 200, "2022-03-07", 5.49, 1);
+
+INSERT INTO tb_produtos (nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES ("Laranja", 3000, "2022-03-13", 10.00, 1);
+
+INSERT INTO tb_produtos (nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES ("Couve", 100, "2022-03-12", 1.50, 2);
+
+INSERT INTO tb_produtos(nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES("Tomate", 1105, "2022-03-15", 3.00, 3);
+
+INSERT INTO tb_produtos(nome, quantidade, dtvalidade, preco, categoria_id)
+VALUES("Rabanete", 1200, "2022-03-15", 13.00, 3);
+
+INSERT INTO tb_produtos(nome, quantidade, preco)
+VALUES("Sacola Cinza", 1118, 0.50);
+
+INSERT INTO tb_produtos(nome, quantidade, preco)
+VALUES("Sacola Verde", 1118, 0.50);
+
+-- Visualiza todos os dados da tabela tb_produtos
 SELECT * FROM tb_produtos;
 
 SELECT nome, preco FROM tb_produtos;
@@ -48,12 +116,54 @@ SELECT * FROM tb_produtos WHERE nome <> "arroz" AND nome <> "tomate";
 
 SELECT nome, CONCAT('R$ ', FORMAT(preco, 2, 'pt_BR')) AS preço FROM tb_produtos;
 
--- atualizar dados da tabela 
-UPDATE tb_produtos SET preco = 8.50 WHERE id = 5;
+SELECT * FROM tb_produtos ORDER BY nome;
 
-DELETE FROM tb_produtos WHERE id = 2;
+SELECT * FROM tb_produtos ORDER BY nome DESC;
 
--- alterações na estrutura da tabela 
+SELECT * FROM tb_produtos WHERE preco IN (5, 10, 15);
+
+SELECT * FROM tb_produtos WHERE preco BETWEEN 5 AND 15;
+
+SELECT * FROM tb_produtos WHERE nome LIKE "%ra%";
+
+SELECT * FROM tb_produtos WHERE nome LIKE "ra%";
+
+SELECT * FROM tb_produtos WHERE nome LIKE "%ra";
+
+SELECT COUNT(*) FROM tb_produtos;
+
+SELECT COUNT(categoria_id) FROM tb_produtos;
+
+-- somatoria dos valores 
+SELECT SUM(preco) FROM tb_produtos;
+
+-- media dos valores
+SELECT AVG(preco) FROM tb_produtos;
+
+SELECT categoria_id, AVG(preco) AS media_preco FROM tb_produtos GROUP BY categoria_id;
+
+SELECT MAX(preco) FROM tb_produtos;
+
+SELECT MIN(preco) FROM tb_produtos;
+
+SELECT nome, preco, quantidade, tb_categorias.descricao 
+FROM tb_produtos INNER JOIN tb_categorias
+ON tb_produtos.categoria_id = tb_categorias.id;
+
+SELECT nome, preco, quantidade, tb_categorias.descricao 
+FROM tb_produtos LEFT JOIN tb_categorias
+ON tb_produtos.categoria_id = tb_categorias.id;
+
+SELECT nome, preco, quantidade, tb_categorias.descricao 
+FROM tb_produtos RIGHT JOIN tb_categorias
+ON tb_produtos.categoria_id = tb_categorias.id;
+
+SELECT nome, preco, quantidade, tb_categorias.descricao 
+FROM tb_produtos INNER JOIN tb_categorias
+ON tb_produtos.categoria_id = tb_categorias.id
+WHERE tb_categorias.descricao = "Frutas";
+
+-- alterando dados da tabela
 ALTER TABLE tb_produtos MODIFY preco decimal(8,2);
 
 ALTER TABLE tb_produtos ADD descricao varchar(255);
@@ -63,5 +173,10 @@ ALTER TABLE tb_produtos DROP descricao;
 ALTER TABLE tb_produtos CHANGE preco valor decimal(8,2);
 
 ALTER TABLE tb_produtos CHANGE valor preco decimal(8,2);
+
+-- atualizando dados da tabela
+UPDATE tb_produtos SET preco = 8.50 WHERE id = 5;
+
+DELETE FROM tb_produtos WHERE id = 5 OR id = 6;
 
 
